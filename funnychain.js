@@ -50,7 +50,7 @@ function makeMeme(memeString) {
 }
 
 function likeMeme(memeId) {
-	// MAKE MEME
+	// LIKE MEME
 	var txOptions = {
 	    nonce: web3.toHex(web3.eth.getTransactionCount(address)),
 	    gasLimit: web3.toHex(800000),
@@ -61,6 +61,31 @@ function likeMeme(memeId) {
 	sendRaw(rawTx);
 }
 
+function killMeme(memeId, memeUrl) {
+	// KILL MEME
+	var txOptions = {
+	    nonce: web3.toHex(web3.eth.getTransactionCount(address)),
+	    gasLimit: web3.toHex(800000),
+	    gasPrice: web3.toHex(20000000000),
+	    to: contractAddress
+	}
+	var rawTx = txutils.functionTx(interface, 'killMeme', [memeId], txOptions);
+	sendRaw(rawTx);
+
+	request({
+	  method: 'DELETE',
+	  url: 'http://localhost:8500/bzz:/' . memeurl,
+	  headers: {
+	    'Content-Type': 'application/json',
+	    'Accept': 'application/json'
+	  }}, function (error, response, body) {
+	  console.log('Status:', response.statusCode);
+	  console.log('Headers:', JSON.stringify(response.headers));
+	  console.log('Response:', body);
+	});
+
+}
+
 var interface = [ { "constant": false, "inputs": [ { "name": "_username", "type": "string" }, { "name": "_password", "type": "string" } ], "name": "registerUser", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "balances", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "users", "outputs": [ { "name": "user", "type": "address", "value": "0xa070abc3c57a74e40ef492224684e206e5220e93" }, { "name": "username", "type": "string", "value": "Im_stupid" }, { "name": "password", "type": "string", "value": "hello" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "memes", "outputs": [ { "name": "memeId", "type": "uint256", "value": "0" }, { "name": "url", "type": "string", "value": "http://www.funnybeing.com/wp-content/uploads/2016/09/Be-Friend-With-Stupid-Person-600x613.jpg" }, { "name": "creator", "type": "address", "value": "0xa070abc3c57a74e40ef492224684e206e5220e93" }, { "name": "likes", "type": "uint256", "value": "1" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "memeCount", "outputs": [ { "name": "", "type": "uint256", "value": "1" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "likes", "outputs": [ { "name": "likeId", "type": "uint256", "value": "0" }, { "name": "memeId", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "contractBalance", "outputs": [ { "name": "", "type": "uint256", "value": "100000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xe0be1ef7486e4afa50a7a479f9da41acf137a461" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "transactions", "outputs": [ { "name": "receiver", "type": "address", "value": "0x" }, { "name": "amount", "type": "uint256", "value": "0" }, { "name": "timestamp", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_memeId", "type": "uint256" } ], "name": "likeMeme", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "previousPayoutLikeIndex", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_url", "type": "string" } ], "name": "newMeme", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "payCreators", "outputs": [ { "name": "success", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ];
 var contractAddress = '0x8DacfBbA179b60065DA39E2645d0BC5B61577A88';
 
@@ -69,12 +94,23 @@ var contractAddress = '0x8DacfBbA179b60065DA39E2645d0BC5B61577A88';
 
 app.get('/makememe', (request, response) => {
 	makeMeme(request.query.memeString);
-  	response.send('You maybe made a meme!')
+  	response.send('You probably made a meme!')
 })
 
 app.get('/likememe', (request, response) => {
 	makeMeme(parseInt(request.query.memeId, 10));
-  	response.send('You maybe liked a meme!')
+  	response.send('You probably liked a meme!')
+})
+
+app.get('/killmeme', (request, response) => {
+	killMeme(parseInt(request.query.memeId, 10), request.query.memeUrl);
+  	response.send('You probably killed a meme!')
+})
+
+app.get('/login', (request, response) => {
+	this.address = request.query.address;
+	this.key = request.query.key;
+  	response.send('You updated your credentials!')
 })
 
 

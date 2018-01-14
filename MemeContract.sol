@@ -85,6 +85,12 @@ contract MemeContract {
         return true;
 
     }
+
+    function revokeAccess(uint _memeId) public {
+        if (memes[_memeId].creator != msg.sender) return;
+        // Remove link so picture is gooone
+        memes[_memeId].url = '';
+    }
     
     function kill() public { 
         if(msg.sender == owner) {
