@@ -1,0 +1,41 @@
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#For removing extension as Options +MultiViews not working with RewriteRule
+RewriteRule welcome$  welcomex.php [L]
+RewriteRule forgot_psswrd$ forgot_psswrdx.php [L]
+RewriteRule signup$ signupx.php [L]
+RewriteRule login$ loginx.php [L]
+RewriteRule explore$ explorex.php [L]
+RewriteRule view_post$ view_postx.php [L]
+RewriteRule profile$ profilex.php [L]
+RewriteRule no_user$ no_userx.php
+RewriteRule notifications$ notificationsx.php
+RewriteRule messages$ messagesx.php
+RewriteRule edit$ editx.php
+RewriteRule settings$ settingsx.php
+# RewriteRule (.*?) $1.php [L]
+# RewriteRule ^([a-zA-Z0-9_]+)$ $1.php [QSA,NC,L]
+
+RewriteRule ^profile/([a-zA-Z0-9._@\-]+)$ profilex.php?u=$1 [QSA,NC,L]
+RewriteRule ^profile/ profilex.php [QSA,NC,L]
+
+RewriteRule ^groups/([0-9]+)$ groups.php?grp=$1 [QSA,NC,L]
+RewriteRule ^groups/ groups.php [QSA,NC,L]
+
+RewriteRule ^view_post/([a-zA-Z0-9]+)$ view_post.php?post=$1 [QSA,NC,L]
+
+ErrorDocument 404 /FunnyChain/404.php
+
+#DirectoryIndex Options +Indexes
+
+<FilesMatch ".(htaccess)">
+  order allow,deny
+  deny from all
+</FilesMatch>
+
+#Options +MultiViews
+
+IndexIgnore *
