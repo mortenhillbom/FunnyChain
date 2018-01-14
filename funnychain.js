@@ -11,6 +11,7 @@ var lightwallet = require('eth-lightwallet');
 var txutils = lightwallet.txutils;
 web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/JxSDkefPqCeOZDze5gyB'));
 
+// it's just testnetstuff btw, so no reason to get all sneaky peaky
 var address = '0xE0be1Ef7486E4AFa50A7a479F9Da41acf137A461';
 var key = '1a0bc92def700891e9c986e90af39b022488cfef8f0487aeb1f79e6b10412cf0';
 
