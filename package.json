@@ -1,0 +1,17 @@
+{
+  "name": "funnychain",
+  "version": "0.1.0",
+  "description": "Memes on the blockchain",
+  "main": "funnychain.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Morten Hillbom",
+  "license": "ISC",
+  "dependencies": {
+    "eth-lightwallet": "^2.5.6",
+    "ethereum-web3-plus": "^0.3.2",
+    "express": "^4.16.2",
+    "web3": "^0.20.3"
+  }
+}
